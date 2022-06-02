@@ -1,0 +1,13 @@
+How many tennis balls fit into a Boeing 787 Dreamliner?
+
+Considering that each ball is a sphere with diameter of: ds
+If I encapsule each ball in a box so each box is : ba = 6 * (ds * ds)
+
+Considering that each person in a plane could be in a box that would be a container: 
+container per person
+
+Imagine inside of the plane as a big rectangle that fits many containers of persons.
+
+So the number of balls is the quantity of balls inside a person container, multiplied to the 
+capacity of the big rectangle to receive person container.
+
