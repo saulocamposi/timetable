@@ -1,4 +1,5 @@
-import { ParseTxt } from './ParseTxt';
+import { ParseTxt } from './ParseTxt.js';
+import * as fs from 'node:fs';
 
 export class ParseCsv{
 

@@ -1,13 +1,23 @@
 import sqlite3 from 'sqlite3';
 import { ParseCsv } from './ParseCsv.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 export class Dao {
 
     constructor(dbname) {
         this.dbname = dbname;
         this.db = this.setupDb();
-        this.parseCsv = new ParseCsv();   
-        sqlite3.verbose();               
+        sqlite3.verbose();
+        this.getParseCsv();               
+    }
+
+    getParseCsv() {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        let csvfile = path.join(__dirname, '..', 'db', 'rest_open_hours.csv');
+        let encode = 'utf-8';
+        this.parsecsv = new ParseCsv(csvfile, encode);
     }
 
     setupDb() {
@@ -48,7 +58,7 @@ export class Dao {
         let day = date.getDay();
         let hour = date.getHours();
         let min = date.getMinutes();
-        sql = ` SELECT * FROM restaurants 
+        const sql = ` SELECT * FROM restaurants 
                     where numberDays LIKE '%' || ? || '%'
                     AND hourTimeBegin <= ? AND minTimeBegin <= ? 
                     AND hourTimeEnd >= ? AND minTimeEnd <= ?` ;
@@ -70,7 +80,7 @@ export class Dao {
                                       minTimeEnd,
                                       originalTime) VALUES (?,?,?,?,?,?,?,?,?)`;
 
-        let csvJson = this.parseCsv.parseCSV();
+        let csvJson = this.parsecsv.parseCSV();
 
         csvJson.forEach(restaurants => {
             restaurants.timetable.forEach(timetable => {

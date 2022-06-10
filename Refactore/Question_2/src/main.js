@@ -1,6 +1,4 @@
 import { Dao } from './Dao.js';
-import { ParseCsv } from './ParseCsv.js';
-import { ParseTxt } from './ParseTxt';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import readline from 'node:readline/promises';
@@ -35,14 +33,10 @@ export class Main {
 
     optionsWelcome(option) {
         option = parseInt(option)
-        console.log(`${option}`);
-        console.log(typeof (option));
-
-
+        
         switch (option) {
             case 1:
-                //this.dao.searchOpenRestaurants();
-                console.log('1');
+                this.dao.searchOpenRestaurants(new Date());                
                 break;
             case 2:
                 this.dao.listAll();
@@ -51,14 +45,15 @@ export class Main {
                 this.dao.parseData();
                 break;
             case 4:
-
+                this.dao.createTables();
                 break;
             case 5:
-
+                this.dao.dropDb();
                 break;
 
 
             default:
+                console.log('Invalid option');
                 break;
         }
     }

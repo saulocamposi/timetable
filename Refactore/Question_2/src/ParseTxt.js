@@ -13,7 +13,7 @@ export class ParseTxt {
         dataInLines.forEach((element, index) => {
             dataInLines[index] = {
                 restaurant: this.sliceRestaurants(element),
-                timetable: this.parseTimetable(time(element))
+                timetable: this.parseTimetable(this.time(element))
             };
         });
         return dataInLines;
@@ -28,12 +28,12 @@ export class ParseTxt {
             let days = e.slice(0, e.indexOf(' '));
             let time = e.slice(e.indexOf(' '));
             time = time.trim();
-            let timereplaced = this.containsAndReplace(time, weekdays, "")
+            let timereplaced = this.containsAndReplace(time, this.weekdays, "")
             if (timereplaced != "") {
                 time = timereplaced.str;
                 days = days.concat(timereplaced.usedElement);
             };
-            let numberDays = this.daysInNumber(days, weekdaysObj);
+            let numberDays = this.daysInNumber(days, this.weekdaysObj);
             let numberTimes = this.timeInNumber(time);
             a[index] = { days: days, time: time, numberDays: numberDays, numberTimes: numberTimes, originalTime: originalTime };
         });
@@ -53,7 +53,7 @@ export class ParseTxt {
     }
 
     range(start, end, length = end - start + 1) {
-        Array.from({ length }, (_, i) => start + i);
+        return Array.from({ length }, (_, i) => start + i);
     }
 
     daysInNumber(days, obj) {
@@ -66,12 +66,12 @@ export class ParseTxt {
         days.forEach((element, index) => {
             if (element.includes("-")) {
                 element = element.split("-");
-                days.push(...range(obj[element[0]], obj[element[1]]))
+                days.push(...this.range(obj[element[0]], obj[element[1]]))
             } else {
                 days[index] = obj[element];
             }
         });
-        days = filterList(days);
+        days = this.filterList(days);
         return days;
     }
 
