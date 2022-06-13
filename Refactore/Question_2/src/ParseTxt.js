@@ -56,24 +56,76 @@ export class ParseTxt {
         return Array.from({ length }, (_, i) => start + i);
     }
 
-    daysInNumber(days, obj) {
-        if (days.includes(",")) {
-            days = days.split(",");
-        } else {
-            days = days.split("-");
-        }
+    // daysInNumber(days, obj) {
+    //     if (days.includes(",")) {
+    //         days = days.split(",");
+    //     } else {
+    //         days = days.split("-");
+    //     }
 
-        days.forEach((element, index) => {
-            if (element.includes("-")) {
-                element = element.split("-");
-                days.push(...this.range(obj[element[0]], obj[element[1]]))
-            } else {
-                days[index] = obj[element];
+    //     days.forEach((element, index) => {
+    //         if (element.includes("-")) {
+    //             element = element.split("-");
+    //             days.push(...this.range(obj[element[0]], obj[element[1]]))
+    //         } else {
+    //             days[index] = obj[element];
+    //         }
+    //     });
+    //     days = this.filterList(days);
+    //     return days;
+    // }
+
+    daysInNumber (days, weekdaysObj)  {
+
+        //range plus day
+        if (days.includes(",")) {
+          days = days.split(",");
+          days = this.rangePlusDay(days);
+          days = this.filterList(days);
+        } else {
+          //range days
+          if (days.includes("-")) {
+            days = this.rangeDays(days);
+            days = this.filterList(days);
+          } else {
+            if (!days.includes("-") && !days.includes(",")) {
+              days = this.notRangeDay(days);
             }
-        });
-        days = this.filterList(days);
+          }
+        } 
         return days;
-    }
+      };
+      
+      rangePlusDay (days) {
+        days.forEach((element, index) => {
+          if (element.includes("-")) {
+            element = element.split("-");
+            days.push(...this.range(this.weekdaysObj[element[0]], this.weekdaysObj[element[1]]))
+          } else {
+            days[index] = this.weekdaysObj[element];
+          }
+        });
+        return days;
+      }
+      
+      rangeDays  (days)  {
+        days = days.split("-");
+      
+        if(this.weekdaysObj[days[1]] == 0 && this.weekdaysObj[days[0]] == 6){
+          days = new Array(this.weekdaysObj[days[0]], this.weekdaysObj[days[1]]);
+        }
+      
+        if ((this.weekdaysObj[days[1]] - this.weekdaysObj[days[0]] + 1) != 0) {
+          days.push(...this.range(this.weekdaysObj[days[0]], this.weekdaysObj[days[1]]));
+        } else {
+          days = new Array(this.weekdaysObj[days[0]], this.weekdaysObj[days[1]]);
+        }
+        return days;
+      }
+      
+       notRangeDay (days)  {
+        return parseInt(this.weekdaysObj[days]);
+      }
 
     filterList(l) {
         return l.filter(x => typeof x === "number");
