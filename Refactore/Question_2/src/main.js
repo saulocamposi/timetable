@@ -6,18 +6,17 @@ import { stdin as input, stdout as output } from 'node:process';
 
 
 export class Main {
-    constructor() {
+    constructor(date) {
         this.getDao();
         this.welcome();
+        this.date = date;
     }
 
     async welcome() {
         this.messageWelcome();
-
         const rl = readline.createInterface({ input, output });
         const answer = await rl.question('Please type your option number: ');
         this.optionsWelcome(answer);
-
         rl.close();
     }
 
@@ -35,8 +34,11 @@ export class Main {
         option = parseInt(option)
         
         switch (option) {
+            case 0:
+                this.dao.searchOpenRestaurants(this.date,option);                
+                break;
             case 1:
-                this.dao.searchOpenRestaurants(new Date());                
+                this.dao.searchOpenRestaurants(this.date,option);                
                 break;
             case 2:
                 this.dao.listAll();
@@ -79,9 +81,13 @@ export class Main {
 
 
 }
+//d1 = new Date();
+let d2 = new Date('June 14, 2022 21:15:30');
+//d2.setTime( d2.getTime() - new Date().getTimezoneOffset()*60*1000 );
 
-let main = new Main();
 
-//console.log("here", main.dao.listAll());
-//console.log("here",main.dao.createTables());
-//console.log("here",main.dao.listAll());
+//new Main(d1);
+new Main(d2);
+//new Main(d3);
+
+
